@@ -4,6 +4,21 @@ from db_models.entries import Entry
 from db_models.participant import Participants
 from db_models.event import Event
 from cloudinary_client import upload_image
+import re
+
+def sanitize_username(username: str) -> str:
+    username = username.strip()
+
+    if len(username) < 3:
+        raise HTTPException(status_code = 400, detail = "Username must be at least 3 characters.")
+
+    if len(username) >= 15:
+        raise HTTPException(status_code = 400, detail = "Username must be at most 15 characters")
+
+    if not re.match(r'^[a-zA-Z0-9_.\-]+$', username):
+        raise HTTPException(status_code = 400, detail = "Username contains invalid characters")
+
+    return username
 
 
 Allowed_Types = [
@@ -13,6 +28,7 @@ Allowed_Types = [
     ]
 
 def upload_entry_service(db, username, file):
+    username = sanitize_username(username)
 
     if file.content_type not in Allowed_Types:
         raise HTTPException(status_code = 400, detail = "Invalid file type!")
