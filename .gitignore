@@ -1,22 +1,27 @@
+# Python
 venv/
-node_modules/
+__pycache__/
+*.pyc
+*.pyo
 
-frontend/node_modules/
-
+# Environment & secrets
+.env
 frontend/.env
-.env
-.env
-
 key.py
 
-**pycache**/
-*.pyc
-
+# Frontend
+frontend/node_modules/
+node_modules/
 dist/
 build/
 
+# Editors
 .vscode/
 .idea/
 
+# Logs
 *.log
 
+# OS
+.DS_Store
+Thumbs.db
