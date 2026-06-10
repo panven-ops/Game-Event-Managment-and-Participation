@@ -9,4 +9,4 @@ router = APIRouter(prefix="/entry", tags=["entry"])
 @router.post("/upload")
 async def upload_entry(username: str = Form(...), file: UploadFile = File(...), db: Session = Depends(get_db)):
 
-    return upload_entry_service(db, username, file)
+    return await upload_entry_service(db, username, file)

@@ -5,6 +5,7 @@ from db_models.participant import Participants
 from db_models.event import Event
 from cloudinary_client import upload_image
 import re
+import magic
 
 def sanitize_username(username: str) -> str:
     username = username.strip()
@@ -27,10 +28,15 @@ Allowed_Types = [
     "image/webp"
     ]
 
-def upload_entry_service(db, username, file):
+async def upload_entry_service(db, username, file):
     username = sanitize_username(username)
 
-    if file.content_type not in Allowed_Types:
+    header = await file.read(2048)
+    await file.seek(0)
+
+    mime = magic.from_buffer(header, mime = True)
+
+    if mime not in Allowed_Types:
         raise HTTPException(status_code = 400, detail = "Invalid file type!")
 
     event = db.query(Event).filter(Event.status == "active").first()
@@ -49,6 +55,11 @@ def upload_entry_service(db, username, file):
         db.commit()
         db.refresh(participant)
 
+
+    total_count = db.query(Entry).filter(Entry.participant_id == participant.id, Entry.event_id == event.id).count()
+
+    if total_count >= 6:
+        raise HTTPException(status_code = 429, detail = "Maximum entry limit reached!")
 
     count = db.query(Entry).filter(Entry.participant_id == participant.id, Entry.event_id == event.id, Entry.is_overflow == False).count()
 
