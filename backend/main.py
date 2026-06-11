@@ -12,6 +12,7 @@ from routes.entr import router as entries_router
 from routes.admin_rout import router as admin_router
 from admin.services.scheduler import start_scheduler
 from routes.public_route import router as public_router
+import os
 
 load_dotenv()
 
@@ -23,9 +24,10 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
+origins = os.getenv("ALLOWED_ORIGINS", "http://localhost:5173").split(",")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -37,7 +39,7 @@ app.include_router(public_router)
 
 @app.get("/")
 def root():
-    return {"message": "API is working hahah"}
+    return {"message": "API is working"}
 
 def custom_openapi():
     if app.openapi_schema:
@@ -58,3 +60,7 @@ def custom_openapi():
     return app.openapi_schema
 
 app.openapi = custom_openapi
+
+@app.get("/health")
+def health():
+    return {"status": "OK"}
