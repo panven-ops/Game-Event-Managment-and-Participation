@@ -1,12 +1,12 @@
 import os
 from dotenv import load_dotenv
-from fastapi import Header, HTTPException
+from fastapi import Header, HTTPException, Request
 
 load_dotenv()
 
 ADMIN_SECRET = os.getenv("ADMIN_SUPER_SECRET_KEY")
 
-def verify_admin(authorization: str = Header(None)):
+def verify_admin(request: Request, authorization: str = Header(None)):
 
     if request.method == "OPTIONS":
         return True
