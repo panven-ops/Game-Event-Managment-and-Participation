@@ -8,6 +8,8 @@ from db_models.event import Event
 from db_models.participant import Participants
 from db_models.entries import Entry
 from db_models.admin_log import AdminLog
+from db_models.admin_state import AdminState
+from routes.admin_auth_rout import router as auth_router
 from routes.entr import router as entries_router
 from routes.admin_rout import router as admin_router
 from admin.services.scheduler import start_scheduler
@@ -33,6 +35,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(auth_router)
 app.include_router(entries_router)
 app.include_router(admin_router)
 app.include_router(public_router)

@@ -6,7 +6,7 @@ from sqlalchemy import pool
 from alembic import context
 
 from db_models.database import Base
-from db_models import event, participant, entries, admin_log
+from db_models import event, participant, entries, admin_log, admin_state, event_winner
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

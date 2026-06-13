@@ -15,7 +15,7 @@ A fullstack giveaway event managment platform. Admins schedule and activate an e
 - Moderate participant entries (approve / reject).
 - Manual and automatic winner selection.
 - Real-time pending entries overview.
-- TOKEN-based admin authentication.
+- JWT-based admin authentication (access & refresh tokens with versioning).
 
 **Public**
 - Submit a screenshot entry with a username.
@@ -62,11 +62,13 @@ To run this project, you will need to create a .env file in the root directory a
 
 `ADMIN_SUPER_SECRET_KEY = `
 
-### Frontend
+`JWT_SECRET_KEY =`
 
-Create a `frontend/.env` file and add 
+`ADMIN_USERNAME =`
 
-`VITE_ADMIN_TOKEN = `
+`ADMIN_PASSWORD_HASH =`
+
+`ENVIRONMENT =`
 
 
 ## Local Setup
@@ -111,5 +113,10 @@ The API will be available at `http://localhost:8000` and the frontend at `http:/
 Interactive docs available at `http://localhost:8000/docs` after starting the server.
 
 ## Roadmap
+
+###Completed
 - JWT authentication for admin
 - Input sanitization for username entries
+
+###Upcoming
+- Multi-event support (separate API/DB per event, shared frontend)

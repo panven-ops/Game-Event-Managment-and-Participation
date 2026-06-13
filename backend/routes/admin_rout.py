@@ -4,7 +4,7 @@ from db_models.database import get_db
 from admin.services.event_services import (get_event_status as svc_get_event_status, start_event as svc_start_event, stop_event as svc_stop_event)
 from admin.services.participants_services import get_participants_overview, get_dashboard_stats
 from admin.services.moderation_services import approve_entry, reject_entry, pending_entry, get_grouped_pendings
-from admin.admin_auth import verify_admin
+from admin.jwt import verify_admin
 from admin.winner_selection import get_winner
 from db_models.event import Event
 from datetime import datetime
