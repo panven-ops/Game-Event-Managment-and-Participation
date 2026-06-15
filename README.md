@@ -1,7 +1,7 @@
 
 # Game Event Managment and Participation
 
-A fullstack giveaway event managment platform. Admins schedule and activate an event, participants upload screenshots and a winner is selected either automatically or manually.
+A fullstack giveaway event managment platform, which was built for a gaming community. Admins schedule and activate an event, participants upload screenshots and a winner is selected either automatically or manually.
 
 ![Admin Dashboard](screenshots/admin_dashboard.png)
 ![Public Page - Active Event](screenshots/active_event_public_page.png)
