@@ -4,7 +4,7 @@
 A fullstack giveaway event managment platform, which was built for a gaming community. Admins schedule and activate an event, participants upload screenshots and a winner is selected either automatically or manually.
 
 ![Admin Dashboard](screenshots/admin_dashboard.png)
-![Public Page - Active Event](screenshots/active_event_public_page.png)
+![Public Page - Active Event](screenshots/public_page_active_event.png)
 ![Public Page - Inactive Event](screenshots/inactive_event_public_page.png)
 ![Public Page - Event Status](screenshots/event_status.png)
 ![Public Page - Event Scheduler](screenshots/event_schedule.png)
