@@ -6,6 +6,9 @@ A fullstack giveaway event managment platform, which was built for a gaming comm
 ![Admin Dashboard](screenshots/admin_dashboard.png)
 ![Public Page - Active Event](screenshots/active_event_public_page.png)
 ![Public Page - Inactive Event](screenshots/inactive_event_public_page.png)
+![Public Page - Event Status](screenshots/event_status.png)
+![Public Page - Event Scheduler](screenshots/event_schedule.png)
+![Public Page - Event Winner](screenshots/event_winner.png)
 
 
 ## Features
