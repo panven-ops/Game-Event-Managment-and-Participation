@@ -50,7 +50,7 @@ def get_dashboard_stats(db):
 
     total_entries = db.query(Entry).filter(Entry.event_id == event.id).count()
 
-    overflow_entries = db.query(Entry).filter(Entry.event_id == event.id, Entry.is_overflow == True).count()
+    overflow_entries = db.query(Entry).filter(Entry.event_id == event.id, Entry.is_overflow == True).count() # noqa: E712
 
     return {
         "event": event.title,

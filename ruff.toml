@@ -1,0 +1,9 @@
+[lint]
+exclude = ["alembic/versions/*.py"]
+
+[lint.per-file-ignores]
+"main.py" = ["F401"]
+"admin/services/event_scheduler.py" = ["F401"]
+"db_models/entries.py" = ["F401"]
+"db_models/participant.py" = ["F401"]
+"routes/admin_auth_rout.py" = ["F401"]

@@ -61,7 +61,7 @@ async def upload_entry_service(db, username, file):
     if total_count >= 6:
         raise HTTPException(status_code = 429, detail = "Maximum entry limit reached!")
 
-    count = db.query(Entry).filter(Entry.participant_id == participant.id, Entry.event_id == event.id, Entry.is_overflow == False).count()
+    count = db.query(Entry).filter(Entry.participant_id == participant.id, Entry.event_id == event.id, Entry.is_overflow == False).count() # noqa: E712
 
     is_overflow = count >= 4
 

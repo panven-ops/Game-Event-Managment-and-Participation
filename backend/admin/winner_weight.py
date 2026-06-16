@@ -7,4 +7,4 @@ def winner_rate(p):
 
     days_since = (datetime.now(timezone.utc) - p.last_win_at).days
 
-    return 1/ (1 + p.win_count * 2) * (1 + p.days_since * 0.1)
+    return 1/ (1 + p.win_count * 2) * (1 + days_since * 0.1)

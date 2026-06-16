@@ -38,7 +38,7 @@ def pending_entry(db):
 
         result.append({
             "entry_id": str(e.id),
-            "username": participant_id if participant else "Unknown",
+            "username": participant.username if participant else "Unknown",
             "screenshot_url": e.screenshot_url,
             "created_at": e.created_at,
             "is_overflow": e.is_overflow

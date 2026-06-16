@@ -18,7 +18,7 @@ def get_winner(db):
     weights = []
 
     for p in participants:
-        entries = db.query(Entry).filter(Entry.participant_id == p.id, Entry.event_id == event.id, Entry.status == "approved", Entry.is_overflow == False).all()
+        entries = db.query(Entry).filter(Entry.participant_id == p.id, Entry.event_id == event.id, Entry.status == "approved", Entry.is_overflow == False).all() # noqa: E712
 
         if len(entries) == 0:
             continue
