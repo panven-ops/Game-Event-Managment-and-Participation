@@ -114,8 +114,8 @@ npm install
 npm run dev
 ```
 
-The API will be available at `http://localhost:8000` and the frontend at `http://localhost:5173`.
-
+The API will be available at `http://localhost:8000`, the frontend at `http://localhost:5173` for the public Page and `http://localhost:5173/?admin=1`.
+The API is also available on cloud at `https://game-event-managment-and-participat.vercel.app` for public page and `https://game-event-managment-and-participat.vercel.app/?admin=1`for admin login
 
 ## Demo Access
 
