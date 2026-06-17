@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { scheduleEvent, getEventStatusAdmin } from "./api"
+import { scheduleEvent, getEventStatusAdmin, isDemo } from "./api"
 
 
 export default function EventSchedulePanel() {
@@ -11,6 +11,7 @@ export default function EventSchedulePanel() {
   const [saved, setSaved] = useState(false)
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
+  const demo = isDemo()
 
   useEffect(() => {
     async function load() {
@@ -141,7 +142,8 @@ export default function EventSchedulePanel() {
         {/*SAVE BUTTON*/}
         <button
           onClick={handleSchedule}
-          disabled={loading}
+          disabled={loading || demo}
+          title={demo ? "Demo mode: this action is disabled" : ""}
           className="w-full py-3 bg-gray-900 hover:bg-gray-700 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-medium rounded-xl transition-colors"
         >
           {loading ? "Saving..." : "Save schedule"}

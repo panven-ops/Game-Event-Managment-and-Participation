@@ -3,6 +3,25 @@ const API_URL = import.meta.env.VITE_API_URL
 
 let accessToken = null
 
+function ParseJWTpayload(token) {
+    try {
+        const base64 = token.split(".")[1]
+        const decoded = atob(base64)
+        return JSON.parse(decoded)
+
+
+    } catch {
+
+        return {}
+    }
+}
+
+export function isDemo() {
+    if (!accessToken) return false
+    const payload = ParseJWTpayload(accessToken)
+    console.log("JWT payload:", payload)
+    return payload.role === "demo"
+}
 
 async function tryRefresh() {
     const res = await fetch(`${API_URL}/auth/refresh`, {
@@ -155,4 +174,15 @@ export async function createEvent(title) {
             method: "POST"
         })
     return res.json()
+}
+
+export async function tryRefreshOnload() {
+    const res = await fetch(`${API_URL}/auth/refresh`, {
+        method: "POST",
+        credentials: "include"
+    })
+    if (!res.ok) return false
+    const data = await res.json()
+    accessToken = data.access_token
+    return true
 }

@@ -49,25 +49,27 @@ def token_increment(db: Session) -> int:
     return state.token_version
 
 
-def create_access_token(token_version: int) -> str:
+def create_access_token(token_version: int, role: str = "admin") -> str:
     expire = datetime.now(timezone.utc) + timedelta(minutes = ACCESS_TOKEN_EXPIRES_AT)
 
     payload = {"sub":"admin",
         "exp":expire,
         "type":"access",
-        "token_version": token_version}
+        "token_version": token_version,
+        "role": role}
 
     return jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
 
 
-def create_refresh_token(token_version: int) -> str:
+def create_refresh_token(token_version: int, role: str = "admin") -> str:
     expire = datetime.now(timezone.utc) + timedelta(days = REFRESH_TOKEN_EXPIRES_AT)
 
 
     payload = {"sub" : "admin",
         "exp" : expire,
         "type" : "refresh",
-        "token_version" : token_version}
+        "token_version" : token_version,
+        "role": role}
 
     return jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
 
@@ -75,7 +77,7 @@ def create_refresh_token(token_version: int) -> str:
 def verify_admin(request: Request, db: Session = Depends(get_db)):
 
     if request.method == "OPTIONS":
-        return True
+        return {}
 
 
     auth_header = request.headers.get("Authorization")
@@ -106,4 +108,13 @@ def verify_admin(request: Request, db: Session = Depends(get_db)):
     if token_version != state.token_version:
         raise HTTPException(status_code = 401, detail = "Token invalid")
 
-    return True
+    return payload
+
+def require_true_admin(payload: dict = Depends(verify_admin)):
+
+    if payload.get("role") == "demo":
+        raise HTTPException(status_code = 403, detail = "Demo mode: This action is disabled")
+
+    return payload
+
+

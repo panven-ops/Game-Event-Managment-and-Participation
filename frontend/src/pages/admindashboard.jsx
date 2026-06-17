@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react"
-import { getpendings, approveEntry, rejectEntry } from "../api"
+import { getpendings, approveEntry, rejectEntry, isDemo } from "../api"
 import ApprovedParticipants from "../approved_participants"
 import EventControlPanel from "../event_control_panel"
 import EventSchedulePanel from "../event_schedule_panel"
@@ -10,6 +10,7 @@ export default function SaaSAdminDashboard({ onLogout }) {
   const [pendings, setPendings] = useState([])
   const [loading, setLoading] = useState(false)
   const approvedRef = useRef(null)
+  const demo = isDemo()
 
   async function loadPendings() {
     const data = await getpendings()
@@ -80,7 +81,7 @@ export default function SaaSAdminDashboard({ onLogout }) {
           ))}
         </nav>
 
-        {/* LOGOUT — mt-auto το σπρώχνει στο κάτω μέρος */}
+        {/* LOGOUT*/}
         <button
           onClick={onLogout}
           className="mt-auto text-left p-3 rounded-xl hover:bg-gray-800 text-red-400 transition"
@@ -104,6 +105,11 @@ export default function SaaSAdminDashboard({ onLogout }) {
             </span>
           </div>
         </div>
+        {demo && (
+          <div className="mb-6 px-4 py-3 bg-amber-50 border border-amber-200 text-amber-800 text-sm rounded-xl">
+            <span className="font-medium">Demo mode</span> — you have read-only access. Destructive actions are disabled.
+          </div>
+        )}
 
         {/* MODERATION TAB */}
         {tab === "moderation" && (
@@ -135,15 +141,17 @@ export default function SaaSAdminDashboard({ onLogout }) {
                         <div className="flex gap-3">
                           <button
                             onClick={() => handleApprove(entry.entry_id)}
-                            disabled={loading}
-                            className="bg-green-600 text-white px-4 py-2 rounded-xl w-full hover:opacity-90 disabled:opacity-40"
+                            disabled={loading || demo}
+                            title={demo ? "Demo mode: this action is disabled" : ""}
+                            className="bg-green-600 text-white px-4 py-2 rounded-xl w-full hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed"
                           >
                             Approve
                           </button>
                           <button
                             onClick={() => handleReject(entry.entry_id)}
-                            disabled={loading}
-                            className="bg-red-600 text-white px-4 py-2 rounded-xl w-full hover:opacity-90 disabled:opacity-40"
+                            disabled={loading || demo}
+                            title={demo ? "Demo mode: this action is disabled" : ""}
+                            className="bg-red-600 text-white px-4 py-2 rounded-xl w-full hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed"
                           >
                             Reject
                           </button>

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { getpendings, approveEntry, rejectEntry } from "../api"
 import ApprovedParticipants from "../approved_participants"
 
-// NEW PANELS (θα τα φτιάξουμε/κουμπώσουμε αύριο πλήρως)
+
 import EventControlPanel from "./EventControlPanel"
 import EventSchedulePanel from "./EventSchedulePanel"
 import WinnerPanel from "./WinnerPanel"
@@ -12,7 +12,7 @@ export default function AdminPage() {
   const [pendings, setPendings] = useState([])
   const [loading, setLoading] = useState(false)
 
-  // 🔥 NEW: dashboard tabs
+  //dashboard tabs
   const [tab, setTab] = useState("moderation")
 
   async function loadPendings() {
@@ -43,9 +43,6 @@ export default function AdminPage() {
 
       <h1>⚙️ Admin Dashboard</h1>
 
-      {/* ========================= */}
-      {/* NAVIGATION */}
-      {/* ========================= */}
       <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
 
         <button onClick={() => setTab("moderation")}>
@@ -66,9 +63,6 @@ export default function AdminPage() {
 
       </div>
 
-      {/* ========================= */}
-      {/* MODERATION */}
-      {/* ========================= */}
       {tab === "moderation" && (
         <>
           <h2>⏳ Pending Entries</h2>
@@ -113,23 +107,15 @@ export default function AdminPage() {
         </>
       )}
 
-      {/* ========================= */}
-      {/* EVENT CONTROL */}
-      {/* ========================= */}
+
       {tab === "control" && (
         <EventControlPanel />
       )}
 
-      {/* ========================= */}
-      {/* SCHEDULING */}
-      {/* ========================= */}
       {tab === "schedule" && (
         <EventSchedulePanel />
       )}
 
-      {/* ========================= */}
-      {/* WINNER */}
-      {/* ========================= */}
       {tab === "winners" && (
         <WinnerPanel />
       )}

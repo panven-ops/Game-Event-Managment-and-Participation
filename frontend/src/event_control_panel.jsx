@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { getEventStatusAdmin, startEvent, stopEvent, createEvent } from "./api"
+import { getEventStatusAdmin, startEvent, stopEvent, createEvent, isDemo } from "./api"
 
 export default function EventControlPanel() {
   const [event, setEvent] = useState(null)
@@ -7,6 +7,7 @@ export default function EventControlPanel() {
   const [loading, setLoading] = useState(false)
   const [newTitle, setNewTitle] = useState("")
   const [creating, setCreating] = useState(false)
+  const demo = isDemo()
 
   async function loadEvent() {
     const data = await getEventStatusAdmin()
@@ -44,12 +45,11 @@ export default function EventControlPanel() {
 
   // Live countdown
   useEffect(() => {
-    if (!event?.ends_at || !event?.active) return  // ← μόνο αν είναι active ΚΑΙ έχει ends_at
+    if (!event?.ends_at || !event?.active) return
 
     const endTime = new Date(event.ends_at).getTime()
     const now = new Date().getTime()
 
-    // Αν το ends_at είναι στο παρελθόν, μην ξεκινήσεις countdown
     if (endTime <= now) return
 
     const interval = setInterval(() => {
@@ -57,7 +57,7 @@ export default function EventControlPanel() {
       if (diff <= 0) {
         setTimeLeft("ENDED")
         clearInterval(interval)
-        loadEvent()  // ← απλώς refresh, όχι stop
+        loadEvent()
         return
       }
       const hours = Math.floor(diff / (1000 * 60 * 60))
@@ -70,7 +70,6 @@ export default function EventControlPanel() {
     return () => clearInterval(interval)
   }, [event])
 
-  // Auto-refresh κάθε 10 δευτερόλεπτα
   useEffect(() => {
     const interval = setInterval(() => loadEvent(), 10000)
     return () => clearInterval(interval)
@@ -79,7 +78,7 @@ export default function EventControlPanel() {
   return (
     <div className="space-y-6">
 
-      {/* CREATE EVENT — εμφανίζεται μόνο αν δεν υπάρχει event */}
+      {/* CREATE EVENT */}
       {(!event || !event.id) && (
         <section className="bg-white rounded-2xl shadow p-6">
           <h2 className="text-2xl font-bold mb-4">Create Event</h2>
@@ -94,8 +93,9 @@ export default function EventControlPanel() {
             />
             <button
               onClick={handleCreate}
-              disabled={creating || !newTitle.trim()}
-              className="bg-black text-white px-6 py-3 rounded-xl hover:opacity-90 transition disabled:opacity-40"
+              disabled={creating || !newTitle.trim() || demo}
+              title={demo ? "Demo mode: this action is disabled" : ""}
+              className="bg-black text-white px-6 py-3 rounded-xl hover:opacity-90 transition disabled:opacity-40 disabled:cursor-not-allowed"
             >
               {creating ? "Creating..." : "Create"}
             </button>
@@ -131,14 +131,16 @@ export default function EventControlPanel() {
             <div className="flex gap-4 flex-wrap">
               <button
                 onClick={handleStart}
-                disabled={loading || event.active}
+                disabled={loading || event.active || demo}
+                title={demo ? "Demo mode: this action is disabled" : ""}
                 className="bg-green-600 text-white px-6 py-3 rounded-xl hover:opacity-90 transition disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 ▶ Start Event
               </button>
               <button
                 onClick={handleStop}
-                disabled={loading || !event.active}
+                disabled={loading || !event.active || demo}
+                title={demo ? "Demo mode: this action is disabled" : ""}
                 className="bg-red-600 text-white px-6 py-3 rounded-xl hover:opacity-90 transition disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 ⛔ Stop Event

@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { selectWinner } from "./api"
+import { selectWinner, isDemo } from "./api"
 
 
 export default function WinnerPanel() {
@@ -7,6 +7,7 @@ export default function WinnerPanel() {
   const [winner, setWinner] = useState(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
+  const demo = isDemo()
 
   async function handlePickWinner() {
     setLoading(true)
@@ -43,7 +44,8 @@ export default function WinnerPanel() {
         {/*PICK BUTTON*/}
         <button
           onClick={handlePickWinner}
-          disabled={loading}
+          disabled={loading || demo}
+          title={demo ? "Demo mode: this action is disabled" : ""}
           className="w-full py-3 bg-gray-900 hover:bg-gray-700 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-medium rounded-xl transition-colors"
         >
           {loading

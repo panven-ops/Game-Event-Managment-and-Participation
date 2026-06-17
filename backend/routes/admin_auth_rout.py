@@ -15,6 +15,8 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 
 ADMIN_USERNAME = os.getenv("ADMIN_USERNAME")
 ADMIN_PASSWORD_HASH = os.getenv("ADMIN_PASSWORD_HASH")
+DEMO_ADMIN_USERNAME = os.getenv("DEMO_ADMIN_USERNAME")
+DEMO_ADMIN_PASSWORD = os.getenv("DEMO_ADMIN_PASSWORD")
 IS_PROD = os.getenv("ENVIRONMENT") == "production"
 
 
@@ -26,16 +28,20 @@ class LoginRequest(BaseModel):
 @router.post("/login")
 def login(body: LoginRequest, response: Response, db: Session = Depends(get_db)):
 
-    if body.username != ADMIN_USERNAME:
-        raise HTTPException(status_code = 401, detail = "Wrong credential")
-    if not verify_password(body.password, ADMIN_PASSWORD_HASH):
+    if body.username == DEMO_ADMIN_USERNAME and body.password == DEMO_ADMIN_PASSWORD:
+        role = "demo"
+
+    elif body.username == ADMIN_USERNAME and verify_password(body.password, ADMIN_PASSWORD_HASH):
+        role = "admin"
+
+    else:
         raise HTTPException(status_code = 401, detail = "Wrong credential")
 
     state = get_create_admin(db)
     version = state.token_version
 
-    access_token = create_access_token(version)
-    refresh_token = create_refresh_token(version)
+    access_token = create_access_token(version, role = role)
+    refresh_token = create_refresh_token(version, role = role)
 
     response.set_cookie(key = "refresh_token",
                         value = refresh_token,
@@ -65,7 +71,8 @@ def refresh(request: Request, response: Response, db: Session = Depends(get_db))
     if payload.get("token_version") != state.token_version:
         raise HTTPException(status_code = 401, detail = "Invalidated token")
 
-    new_access_token = create_access_token(state.token_version)
+    role = payload.get("role", "admin")
+    new_access_token = create_access_token(state.token_version, role = role)
 
     return {"access_token": new_access_token, "token_type": "bearer"}
 
