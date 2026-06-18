@@ -47,7 +47,7 @@ def login(body: LoginRequest, response: Response, db: Session = Depends(get_db))
                         value = refresh_token,
                         httponly = True,
                         secure = IS_PROD,
-                        samesite = "strict" if IS_PROD else "lax",
+                        samesite = "none" if IS_PROD else "lax",
                         max_age = 60 * 60 * 24 * REFRESH_TOKEN_EXPIRES_AT)
 
     return {"access_token": access_token, "token_type": "bearer"}
@@ -85,6 +85,6 @@ def logout(response: Response, db: Session = Depends(get_db)):
     response.delete_cookie(key = "refresh_token",
                            httponly = True,
                            secure = IS_PROD,
-                           samesite = "strict" if IS_PROD else "lax")
+                           samesite = "none" if IS_PROD else "lax")
 
     return {"message": "Succesfully logout!"}
